@@ -1,1 +1,125 @@
+import java.util.Scanner;
 
+public class Vetor {
+    public static final int TAM_A = 5;
+    public static final int TAM_B = 5;
+    public static Scanner jv = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        int a[] = new int[TAM_A];
+        int b[] = new int[TAM_B];
+        int u[] = new int[TAM_A + TAM_B];
+        int vsr[] = new int[u.length];
+
+        preencherVetor(a, "A");
+        preencherVetor(b, "B");
+
+        // juntar os vetores a e b
+        for (int i = 0; i < a.length; i++) {
+            u[i] = a[i];
+        }
+
+        for (int i = 0; i < b.length; i++) {
+            u[a.length + i] = b[i];
+        }
+
+        // mostrar vetor original 
+        System.out.println("\nVetor original:");
+        for (int i = 0; i < u.length; i++) {
+            System.out.print(u[i] + " ");
+        }
+
+        // ordenar
+        insertionSort(u, u.length);
+
+        System.out.println("\nVetor ordenado:");
+        for (int i = 0; i < u.length; i++) {
+            System.out.print(u[i] + " ");
+        }
+
+        // remover numeros repetidos
+        int tamVSR = gerarVetorSemRepeticao(u, u.length, vsr);
+
+        System.out.println("\nVetor sem repetição:");
+        for (int i = 0; i < tamVSR; i++) {
+            System.out.print(vsr[i] + " ");
+        }
+
+        jv.close();
+    }
+
+    // vai preencher os vetores com numeros inteiros    
+    public static void preencherVetor(int[] v, String nome) {
+        for (int i = 0; i < v.length; i++) {
+            System.out.print("Digite " + nome + "[" + i + "]: ");
+
+            while (!jv.hasNextInt()) {
+                System.out.println("Digite apenas números!");
+                jv.next();
+            }
+
+            v[i] = jv.nextInt();
+        }
+    }
+
+    // Insertion Sort
+    public static void insertionSort(int[] v, int tam) {
+        int aux, j;
+
+        for (int i = 1; i < tam; i++) {
+            aux = v[i];
+            j = i - 1;
+
+            while (j >= 0 && v[j] > aux) {
+                v[j + 1] = v[j];
+                j--;
+            }
+
+            v[j + 1] = aux;
+        }
+    }
+
+    // remover repetição
+    public static int gerarVetorSemRepeticao(int[] v, int tamV, int[] vsr) {
+        int tamVSR = 0;
+
+        for (int i = 0; i < tamV; i++) {
+            boolean repetido = false;
+
+            for (int j = 0; j < tamVSR; j++) {
+                if (v[i] == vsr[j]) {
+                    repetido = true;
+                    break;
+                }
+            }
+
+            if (!repetido) {
+                vsr[tamVSR] = v[i];
+                tamVSR++;
+            }
+        }
+
+        return tamVSR;
+    }
+
+    // rotação
+    public static void rotacionar(int[] v, int tam, int k) {
+        if (tam == 0) return;
+
+        k = k % tam;
+
+        if (k < 0) {
+            k = k + tam;
+        }
+
+        for (int i = 0; i < k; i++) {
+            int primeiro = v[0];
+
+            for (int j = 0; j < tam - 1; j++) {
+                v[j] = v[j + 1];
+            }
+
+            v[tam - 1] = primeiro;
+        }
+    }
+}                    
